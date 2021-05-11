@@ -13,8 +13,8 @@ public class EternalChia {
     }
 
     public EternalChia(String[] args) {
-        inputHandler = new InputHandler();
         chiaCliHandler = new ChiaCliHandler(args, new ProcessBuilder());
+        inputHandler = new InputHandler(chiaCliHandler);
     }
 
     public void run() throws IOException, InterruptedException {
