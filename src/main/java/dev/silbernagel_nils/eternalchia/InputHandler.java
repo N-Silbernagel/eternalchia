@@ -3,7 +3,7 @@ package dev.silbernagel_nils.eternalchia;
 import java.util.Scanner;
 
 public class InputHandler {
-    private static final String STOP_COMMAND = "s";
+    public static final String STOP_COMMAND = "s";
 
     private boolean stopped = false;
 
@@ -15,7 +15,7 @@ public class InputHandler {
         new Thread(this::listen).start();
     }
 
-    private void listen() {
+    public void listen() {
         Scanner inputScanner = new Scanner(System.in);
 
         while (!stopped){

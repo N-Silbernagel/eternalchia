@@ -14,7 +14,7 @@ public class EternalChia {
 
     public EternalChia(String[] args) {
         inputHandler = new InputHandler();
-        chiaCliHandler = new ChiaCliHandler(args);
+        chiaCliHandler = new ChiaCliHandler(args, new ProcessBuilder());
     }
 
     public void run() throws IOException, InterruptedException {
