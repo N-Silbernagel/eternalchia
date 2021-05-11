@@ -7,7 +7,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 
@@ -54,5 +53,21 @@ class InputHandlerTest {
         inputHandler.showInfo();
 
         assertTrue(output.toString().contains("" + expectedPlots));
+    }
+
+    @Test
+    public void info_includes_the_cumulative_plotting_time() {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(output));
+
+        double expectedTime = 5.0;
+        when(chiaCliHandler.getPlots()).thenReturn(1L);
+        when(chiaCliHandler.getAccPlotTime()).thenReturn(expectedTime);
+
+        InputHandler inputHandler = spy(new InputHandler(chiaCliHandler));
+
+        inputHandler.showInfo();
+
+        assertTrue(output.toString().contains("" + expectedTime));
     }
 }

@@ -42,6 +42,6 @@ public class InputHandler {
     }
 
     public void showInfo() {
-        System.out.println("Generated Plots: " + chiaCliHandler.getPlots());
+        System.out.println("Generated " + chiaCliHandler.getPlots() + " Plots in " + chiaCliHandler.getAccPlotTime() + " hours");
     }
 }
