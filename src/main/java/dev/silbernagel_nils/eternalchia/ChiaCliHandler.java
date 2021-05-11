@@ -5,17 +5,16 @@ import java.io.IOException;
 public class ChiaCliHandler {
     private final String[] chiaArguments;
     private final ProcessBuilder processBuilder;
+    private final Statistics stats;
 
-    private long plots = 0;
-    private long accPlotTime = 0;
-
-    public ChiaCliHandler(String[] args, ProcessBuilder processBuilder) {
+    public ChiaCliHandler(String[] args, ProcessBuilder processBuilder, Statistics stats) {
         this.chiaArguments = args;
         this.processBuilder = processBuilder;
+        this.stats = stats;
     }
 
     public void plot() throws IOException, InterruptedException {
-        System.out.println("Starting plot n." + (plots + 1));
+        System.out.println("Starting plot n." + (stats.getGeneratedPlots() + 1));
 
         long startTime = System.currentTimeMillis();
 
@@ -24,24 +23,10 @@ public class ChiaCliHandler {
                 .start()
                 .waitFor();
 
-        accPlotTime += System.currentTimeMillis() - startTime;
-        plots++;
+        long plotTime = System.currentTimeMillis() - startTime;
+        stats.addPlottingTime(plotTime);
+        stats.addGeneratedPlot();
 
-        System.out.println("Finished plot n." + plots + " in " + millisToHours(accPlotTime) + " Hours.\n");
-    }
-
-    public long getPlots() {
-        return plots;
-    }
-
-    /**
-     * Get accumulated plot time in hours
-     */
-    public double getAccPlotTime() {
-        return millisToHours(accPlotTime);
-    }
-
-    private static double millisToHours(long millis) {
-        return ((double)(millis / 600)) / 100;
+        System.out.println("Finished plot n." + stats.getGeneratedPlots() + " in " + Statistics.millisToHours(plotTime) + " Hours.\n");
     }
 }

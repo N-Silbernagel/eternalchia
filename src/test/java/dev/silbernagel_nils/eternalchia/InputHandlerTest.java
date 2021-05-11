@@ -17,12 +17,14 @@ import static org.mockito.Mockito.*;
 class InputHandlerTest {
     @Mock
     private ChiaCliHandler chiaCliHandler;
+    @Mock
+    public Statistics stats;
 
     @Test
     public void it_handles_a_stop_command() {
         System.setIn(new ByteArrayInputStream(InputHandler.STOP_COMMAND.getBytes(StandardCharsets.UTF_8)));
 
-        InputHandler inputHandler = new InputHandler(chiaCliHandler);
+        InputHandler inputHandler = new InputHandler(stats);
 
         inputHandler.listen();
 
@@ -33,7 +35,7 @@ class InputHandlerTest {
     public void it_handles_an_info_command() {
         System.setIn(new ByteArrayInputStream(InputHandler.INFO_COMMAND.getBytes(StandardCharsets.UTF_8)));
 
-        InputHandler inputHandler = spy(new InputHandler(chiaCliHandler));
+        InputHandler inputHandler = spy(new InputHandler(stats));
 
         inputHandler.listen();
 
@@ -46,9 +48,9 @@ class InputHandlerTest {
         System.setOut(new PrintStream(output));
 
         long expectedPlots = 5;
-        when(chiaCliHandler.getPlots()).thenReturn(expectedPlots);
+        when(stats.getGeneratedPlots()).thenReturn(expectedPlots);
 
-        InputHandler inputHandler = spy(new InputHandler(chiaCliHandler));
+        InputHandler inputHandler = spy(new InputHandler(stats));
 
         inputHandler.showInfo();
 
@@ -61,10 +63,9 @@ class InputHandlerTest {
         System.setOut(new PrintStream(output));
 
         double expectedTime = 5.0;
-        when(chiaCliHandler.getPlots()).thenReturn(1L);
-        when(chiaCliHandler.getAccPlotTime()).thenReturn(expectedTime);
+        when(stats.getAccumulatedTimeToPlot()).thenReturn(expectedTime);
 
-        InputHandler inputHandler = spy(new InputHandler(chiaCliHandler));
+        InputHandler inputHandler = spy(new InputHandler(stats));
 
         inputHandler.showInfo();
 

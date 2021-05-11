@@ -8,10 +8,10 @@ public class InputHandler {
 
     private boolean stopped = false;
 
-    private final ChiaCliHandler chiaCliHandler;
+    private final Statistics stats;
 
-    public InputHandler(ChiaCliHandler chiaCliHandler) {
-        this.chiaCliHandler = chiaCliHandler;
+    public InputHandler(Statistics stats) {
+        this.stats = stats;
     }
 
     public boolean receivedStop() {
@@ -42,6 +42,6 @@ public class InputHandler {
     }
 
     public void showInfo() {
-        System.out.println("Generated " + chiaCliHandler.getPlots() + " Plots in " + chiaCliHandler.getAccPlotTime() + " hours");
+        System.out.println("Generated " + stats.getGeneratedPlots() + " Plots in " + stats.getAccumulatedTimeToPlot() + " hours");
     }
 }

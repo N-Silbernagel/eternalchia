@@ -7,14 +7,16 @@ public class EternalChia {
 
     private final ChiaCliHandler chiaCliHandler;
     private final InputHandler inputHandler;
+    private final Statistics stats;
 
     public static void main(String[] args) throws IOException, InterruptedException {
         new EternalChia(args).run();
     }
 
     public EternalChia(String[] args) {
-        chiaCliHandler = new ChiaCliHandler(args, new ProcessBuilder());
-        inputHandler = new InputHandler(chiaCliHandler);
+        stats = new Statistics();
+        chiaCliHandler = new ChiaCliHandler(args, new ProcessBuilder(), stats);
+        inputHandler = new InputHandler(stats);
     }
 
     public void run() throws IOException, InterruptedException {

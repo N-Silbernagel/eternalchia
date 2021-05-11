@@ -17,6 +17,8 @@ class ChiaCliHandlerTest {
     public ProcessBuilder processBuilder;
     @Mock
     public Process process;
+    @Mock
+    public Statistics statistics;
 
     private final String[] chiaArgs = new String[]{"-k", "32", "-r", "1"};
 
@@ -29,7 +31,7 @@ class ChiaCliHandlerTest {
 
     @Test
     public void it_executes_chia_plot_command_with_args () throws IOException, InterruptedException {
-        ChiaCliHandler chiaCliHandler = new ChiaCliHandler(chiaArgs, processBuilder);
+        ChiaCliHandler chiaCliHandler = new ChiaCliHandler(chiaArgs, processBuilder, statistics);
 
         chiaCliHandler.plot();
 
@@ -38,21 +40,21 @@ class ChiaCliHandlerTest {
     }
 
     @Test
-    public void it_knows_how_many_plots_it_made() throws IOException, InterruptedException {
+    public void it_counts_the_plot_count_up() throws IOException, InterruptedException {
         int plots = 5;
 
-        ChiaCliHandler chiaCliHandler = new ChiaCliHandler(chiaArgs, processBuilder);
+        ChiaCliHandler chiaCliHandler = new ChiaCliHandler(chiaArgs, processBuilder, statistics);
 
         for(int i = 0; i < plots; i++){
             chiaCliHandler.plot();
         }
 
-        assertEquals(chiaCliHandler.getPlots(), plots);
+        verify(statistics, times(5)).addGeneratedPlot();
     }
 
     @Test
     public void it_waits_for_the_plot_command_to_finish() throws IOException, InterruptedException {
-        ChiaCliHandler chiaCliHandler = new ChiaCliHandler(chiaArgs, processBuilder);
+        ChiaCliHandler chiaCliHandler = new ChiaCliHandler(chiaArgs, processBuilder, statistics);
 
         chiaCliHandler.plot();
 
@@ -61,7 +63,7 @@ class ChiaCliHandlerTest {
 
     @Test
     public void it_redirects_the_plotting_output_to_stdout() throws IOException, InterruptedException {
-        ChiaCliHandler chiaCliHandler = new ChiaCliHandler(chiaArgs, processBuilder);
+        ChiaCliHandler chiaCliHandler = new ChiaCliHandler(chiaArgs, processBuilder, statistics);
 
         chiaCliHandler.plot();
 
