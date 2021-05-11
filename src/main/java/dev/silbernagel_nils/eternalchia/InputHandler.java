@@ -37,11 +37,7 @@ public class InputHandler {
         }
 
         if (nextLine.equalsIgnoreCase(INFO_COMMAND)) {
-            this.showInfo();
+            stats.showInfo();
         }
-    }
-
-    public void showInfo() {
-        System.out.println("Generated " + stats.getGeneratedPlots() + " Plots in " + stats.getAccumulatedTimeToPlot() + " hours");
     }
 }

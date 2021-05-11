@@ -6,8 +6,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,8 +13,6 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class InputHandlerTest {
-    @Mock
-    private ChiaCliHandler chiaCliHandler;
     @Mock
     public Statistics stats;
 
@@ -39,36 +35,6 @@ class InputHandlerTest {
 
         inputHandler.listen();
 
-        verify(inputHandler).showInfo();
-    }
-
-    @Test
-    public void info_includes_the_plots_generated() {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(output));
-
-        long expectedPlots = 5;
-        when(stats.getGeneratedPlots()).thenReturn(expectedPlots);
-
-        InputHandler inputHandler = spy(new InputHandler(stats));
-
-        inputHandler.showInfo();
-
-        assertTrue(output.toString().contains("" + expectedPlots));
-    }
-
-    @Test
-    public void info_includes_the_cumulative_plotting_time() {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(output));
-
-        double expectedTime = 5.0;
-        when(stats.getAccumulatedTimeToPlot()).thenReturn(expectedTime);
-
-        InputHandler inputHandler = spy(new InputHandler(stats));
-
-        inputHandler.showInfo();
-
-        assertTrue(output.toString().contains("" + expectedTime));
+        verify(stats).showInfo();
     }
 }
