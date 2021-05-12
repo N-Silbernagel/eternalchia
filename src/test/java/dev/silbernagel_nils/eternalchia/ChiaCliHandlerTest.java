@@ -9,6 +9,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -22,7 +24,7 @@ class ChiaCliHandlerTest {
     @Mock
     public Statistics statistics;
 
-    private final String[] chiaArgs = new String[]{"-k", "32", "-r", "1"};
+    private final List<String> chiaArgs = List.of("-k", "32", "-r", "1");
 
     private ChiaCliHandler chiaCliHandler;
 
@@ -39,7 +41,7 @@ class ChiaCliHandlerTest {
     public void it_executes_chia_plot_command_with_args () throws IOException, InterruptedException {
         ChiaCliHandler chiaCliHandler = new ChiaCliHandler(chiaArgs, processBuilder, statistics);
 
-        chiaCliHandler.plot();
+        chiaCliHandler.plot(1);
 
         verify(processBuilder).command(anyString(), eq(String.join(" ", chiaArgs)));
         verify(processBuilder).start();
@@ -50,7 +52,7 @@ class ChiaCliHandlerTest {
         int plots = 5;
 
         for(int i = 0; i < plots; i++){
-            chiaCliHandler.plot();
+            chiaCliHandler.plot(1);
         }
 
         verify(statistics, times(5)).addGeneratedPlot();
@@ -58,7 +60,7 @@ class ChiaCliHandlerTest {
 
     @Test
     public void it_waits_for_the_plot_command_to_finish() throws IOException, InterruptedException {
-        chiaCliHandler.plot();
+        chiaCliHandler.plot(1);
 
         verify(process).waitFor();
     }
@@ -66,7 +68,7 @@ class ChiaCliHandlerTest {
     @Test
     public void it_redirects_the_plotting_output_to_stdout() throws IOException, InterruptedException {
 
-        chiaCliHandler.plot();
+        chiaCliHandler.plot(1);
 
         verify(processBuilder).inheritIO();
     }
@@ -75,7 +77,7 @@ class ChiaCliHandlerTest {
     public void it_doesnt_count_plots_up_is_process_exists_with_error() throws IOException, InterruptedException {
         when(process.waitFor()).thenReturn(1);
 
-        chiaCliHandler.plot();
+        chiaCliHandler.plot(1);
 
         verify(statistics, times(0)).addGeneratedPlot();
     }
