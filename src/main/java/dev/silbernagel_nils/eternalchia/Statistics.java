@@ -2,8 +2,8 @@ package dev.silbernagel_nils.eternalchia;
 
 public class Statistics {
     private long generatedPlots = 0;
-
     private long plotTime = 0;
+    private long failPlots = 0;
 
     public long getGeneratedPlots() {
         return generatedPlots;
@@ -11,6 +11,14 @@ public class Statistics {
 
     public void addGeneratedPlot() {
         this.generatedPlots++;
+    }
+
+    public long getFailedPlots() {
+        return failPlots;
+    }
+
+    public void addFailedPlot() {
+        this.failPlots++;
     }
 
     public double getPlotTime() {
@@ -26,6 +34,7 @@ public class Statistics {
     }
 
     public void showInfo() {
-        System.out.println("Generated " + getGeneratedPlots() + " Plots in " + getPlotTime() + " hours");
+        System.out.println("Generated " + getGeneratedPlots() + " plots in " + getPlotTime() + " hours");
+        System.out.println(getFailedPlots() + " plots failed.");
     }
 }

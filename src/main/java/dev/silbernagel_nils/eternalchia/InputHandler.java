@@ -6,16 +6,12 @@ public class InputHandler {
     public static final String STOP_COMMAND = "s";
     public static final String INFO_COMMAND = "i";
 
-    private boolean stopped = false;
-
     private final Statistics stats;
+    private final ChiaCliHandler chiaCliHandler;
 
-    public InputHandler(Statistics stats) {
+    public InputHandler(Statistics stats, ChiaCliHandler chiaCliHandler) {
         this.stats = stats;
-    }
-
-    public boolean receivedStop() {
-        return stopped;
+        this.chiaCliHandler = chiaCliHandler;
     }
 
     public void listenParallel() {
@@ -25,14 +21,14 @@ public class InputHandler {
     public void listen() {
         Scanner inputScanner = new Scanner(System.in);
 
-        while (!receivedStop() && inputScanner.hasNextLine()){
+        while (chiaCliHandler.shouldStartNext() && inputScanner.hasNextLine()){
             this.handleNextLine(inputScanner.nextLine());
         }
     }
 
     private void handleNextLine(String nextLine) {
         if (nextLine.equalsIgnoreCase(STOP_COMMAND)){
-            stopped = true;
+            chiaCliHandler.setStartNext(false);
             return;
         }
 

@@ -7,6 +7,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -22,11 +24,15 @@ class ChiaCliHandlerTest {
 
     private final String[] chiaArgs = new String[]{"-k", "32", "-r", "1"};
 
+    private ChiaCliHandler chiaCliHandler;
+
     @BeforeEach
     public void setUp() throws IOException {
         when(processBuilder.command(anyString(), anyString())).thenReturn(processBuilder);
         when(processBuilder.inheritIO()).thenReturn(processBuilder);
         when(processBuilder.start()).thenReturn(process);
+
+        chiaCliHandler = new ChiaCliHandler(chiaArgs, processBuilder, statistics);
     }
 
     @Test
@@ -43,8 +49,6 @@ class ChiaCliHandlerTest {
     public void it_counts_the_plot_count_up() throws IOException, InterruptedException {
         int plots = 5;
 
-        ChiaCliHandler chiaCliHandler = new ChiaCliHandler(chiaArgs, processBuilder, statistics);
-
         for(int i = 0; i < plots; i++){
             chiaCliHandler.plot();
         }
@@ -54,8 +58,6 @@ class ChiaCliHandlerTest {
 
     @Test
     public void it_waits_for_the_plot_command_to_finish() throws IOException, InterruptedException {
-        ChiaCliHandler chiaCliHandler = new ChiaCliHandler(chiaArgs, processBuilder, statistics);
-
         chiaCliHandler.plot();
 
         verify(process).waitFor();
@@ -63,7 +65,6 @@ class ChiaCliHandlerTest {
 
     @Test
     public void it_redirects_the_plotting_output_to_stdout() throws IOException, InterruptedException {
-        ChiaCliHandler chiaCliHandler = new ChiaCliHandler(chiaArgs, processBuilder, statistics);
 
         chiaCliHandler.plot();
 
@@ -73,7 +74,6 @@ class ChiaCliHandlerTest {
     @Test
     public void it_doesnt_count_plots_up_is_process_exists_with_error() throws IOException, InterruptedException {
         when(process.waitFor()).thenReturn(1);
-        ChiaCliHandler chiaCliHandler = new ChiaCliHandler(chiaArgs, processBuilder, statistics);
 
         chiaCliHandler.plot();
 
