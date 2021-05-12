@@ -18,10 +18,15 @@ public class ChiaCliHandler {
 
         long startTime = System.currentTimeMillis();
 
-        processBuilder.command("ls", String.join(" ", this.chiaArguments))
+        int existCode = processBuilder.command("ls", String.join(" ", this.chiaArguments))
                 .inheritIO()
                 .start()
                 .waitFor();
+
+        if(existCode != 0) {
+            System.err.println("Generating plot n." + (stats.getGeneratedPlots() + 1) + " failed.");
+            return;
+        }
 
         long plotTime = System.currentTimeMillis() - startTime;
         stats.addPlottingTime(plotTime);

@@ -69,4 +69,14 @@ class ChiaCliHandlerTest {
 
         verify(processBuilder).inheritIO();
     }
+
+    @Test
+    public void it_doesnt_count_plots_up_is_process_exists_with_error() throws IOException, InterruptedException {
+        when(process.waitFor()).thenReturn(1);
+        ChiaCliHandler chiaCliHandler = new ChiaCliHandler(chiaArgs, processBuilder, statistics);
+
+        chiaCliHandler.plot();
+
+        verify(statistics, times(0)).addGeneratedPlot();
+    }
 }
