@@ -3,6 +3,7 @@ package dev.silbernagel_nils.eternalchia;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class ChiaCliHandler {
     private final List<String> chiaArguments;
@@ -29,7 +30,7 @@ public class ChiaCliHandler {
 
         long startTime = System.currentTimeMillis();
 
-        processBuilder.command("ls", String.join(" ", chiaArguments))
+        processBuilder.command("chia", String.join(" ", chiaArguments))
                 .redirectError(new File("chia_cli_errors"))
                 .start()
                 .onExit()
