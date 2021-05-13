@@ -13,6 +13,10 @@ public class Statistics {
         this.generatedPlots++;
     }
 
+    public void removeGeneratedPlot() {
+        this.generatedPlots--;
+    }
+
     public long getFailedPlots() {
         return failPlots;
     }
@@ -34,7 +38,8 @@ public class Statistics {
     }
 
     public void showInfo() {
-        System.out.println("Generated " + getGeneratedPlots() + " plots in " + getPlotTime() + " hours");
+        System.out.println("Generated " + getGeneratedPlots() + " plots.");
         System.out.println(getFailedPlots() + " plots failed.");
+        System.out.println("Total plotting time: " + getPlotTime() + ".");
     }
 }

@@ -1,8 +1,8 @@
 package dev.silbernagel_nils.eternalchia;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 public class ChiaCliHandler {
     private final List<String> chiaArguments;
@@ -24,16 +24,16 @@ public class ChiaCliHandler {
     }
 
     private void plot() throws IOException {
-        System.out.println("Starting plot n." + (stats.getGeneratedPlots() + 1));
+        stats.addGeneratedPlot();
+        System.out.println("Starting plot n." + stats.getGeneratedPlots());
 
         long startTime = System.currentTimeMillis();
 
-        CompletableFuture<Process> processCompletion = processBuilder.command("ls", String.join(" ", this.chiaArguments))
-                .inheritIO()
+        processBuilder.command("ls", String.join(" ", chiaArguments))
+                .redirectError(new File("chia_cli_errors"))
                 .start()
-                .onExit();
-
-        processCompletion.thenAccept(process -> this.handleCompletedPlotProcess(process, startTime));
+                .onExit()
+                .thenAccept(process -> this.handleCompletedPlotProcess(process, startTime));
     }
 
     private void handleCompletedPlotProcess(Process process, long pStartTime) {
@@ -42,9 +42,9 @@ public class ChiaCliHandler {
 
         if (process.exitValue() != 0) {
             stats.addFailedPlot();
-            System.err.println("Generating plot n." + (stats.getGeneratedPlots() + 1) + " failed.\n");
+            System.err.println("Generating plot n." + stats.getGeneratedPlots() + " failed.\n");
+            stats.removeGeneratedPlot();
         } else {
-            stats.addGeneratedPlot();
             System.out.println("Finished plot n." + stats.getGeneratedPlots() + " in " + Statistics.millisToHours(plotTime) + " Hours.\n");
         }
 
