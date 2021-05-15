@@ -2,6 +2,7 @@ package dev.silbernagel_nils.eternalchia;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -12,7 +13,7 @@ public class ChiaCliHandler {
 
     private boolean startNext = true;
 
-    public ChiaCliHandler(List<String> args, ProcessBuilder processBuilder, Statistics stats) {
+    public ChiaCliHandler(ArrayList<String> args, ProcessBuilder processBuilder, Statistics stats) {
         this.chiaArguments = args;
         this.processBuilder = processBuilder;
         this.stats = stats;
@@ -30,8 +31,12 @@ public class ChiaCliHandler {
 
         long startTime = System.currentTimeMillis();
 
-        processBuilder.command("chia", String.join(" ", chiaArguments))
-                .redirectError(new File("chia_cli_errors"))
+        chiaArguments.add(0, "chia");
+        chiaArguments.add(1, "plots");
+        chiaArguments.add(2, "create");
+
+        processBuilder.command(chiaArguments.toArray(new String[0]))
+                .inheritIO()
                 .start()
                 .onExit()
                 .thenAccept(process -> this.handleCompletedPlotProcess(process, startTime));

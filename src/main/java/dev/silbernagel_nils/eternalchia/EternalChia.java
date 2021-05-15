@@ -16,19 +16,19 @@ public class EternalChia {
         List<String> argsList = Arrays.asList(args);
 
         List<String> appArgs;
-        List<String> chiaArgs;
+        ArrayList<String> chiaArgs;
 
         if(!argsList.contains("--")){
             appArgs = argsList;
             chiaArgs = new ArrayList<>(0);
         } else {
             appArgs = argsList.subList(0, argsList.indexOf("--"));
-            chiaArgs = argsList.subList(argsList.indexOf("--") + 1, argsList.size());
+            chiaArgs = new ArrayList<>(argsList.subList(argsList.indexOf("--") + 1, argsList.size()));
         }
         new EternalChia(appArgs, chiaArgs).run();
     }
 
-    public EternalChia(List<String> appArgsList, List<String> chiaArgs) {
+    public EternalChia(List<String> appArgsList, ArrayList<String> chiaArgs) {
         appArgs = AppArgs.fromArgList(appArgsList);
         stats = new Statistics();
         chiaCliHandler = new ChiaCliHandler(chiaArgs, new ProcessBuilder(), stats);
