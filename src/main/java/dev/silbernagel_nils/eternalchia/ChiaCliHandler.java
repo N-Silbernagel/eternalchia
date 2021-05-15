@@ -36,7 +36,7 @@ public class ChiaCliHandler {
         chiaArguments.add(2, "create");
 
         processBuilder.command(chiaArguments.toArray(new String[0]))
-                .inheritIO()
+                .redirectError(new File("chia_cli_errors"))
                 .start()
                 .onExit()
                 .thenAccept(process -> this.handleCompletedPlotProcess(process, startTime));
