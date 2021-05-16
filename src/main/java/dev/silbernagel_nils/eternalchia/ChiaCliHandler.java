@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 public class ChiaCliHandler {
     private final List<String> chiaArguments;
@@ -19,13 +18,17 @@ public class ChiaCliHandler {
         this.stats = stats;
     }
 
-    public void plot(int n) throws IOException {
+    public void plotParallel(int n) throws IOException {
         for (int i=1; i<=n; i++) {
-            this.plot();
+            this.plot(i);
         }
     }
 
-    private void plot() throws IOException {
+    /**
+     * start a plot
+     * @param index index of the plot in the number of plots to do in parallel
+     */
+    private void plot(int index) throws IOException {
         stats.addGeneratedPlot();
         System.out.println("Starting plot n." + stats.getGeneratedPlots());
 
@@ -37,12 +40,13 @@ public class ChiaCliHandler {
 
         processBuilder.command(chiaArguments.toArray(new String[0]))
                 .redirectError(new File("chia_cli_errors"))
+                .redirectOutput(new File("chia_cli_output_" + index))
                 .start()
                 .onExit()
-                .thenAccept(process -> this.handleCompletedPlotProcess(process, startTime));
+                .thenAccept(process -> this.handleCompletedPlotProcess(process, startTime, index));
     }
 
-    private void handleCompletedPlotProcess(Process process, long pStartTime) {
+    private void handleCompletedPlotProcess(Process process, long pStartTime, int index) {
         long plotTime = System.currentTimeMillis() - pStartTime;
         stats.addPlottingTime(plotTime);
 
@@ -56,9 +60,10 @@ public class ChiaCliHandler {
 
         if (shouldStartNext()){
             try {
-                plot();
+                plot(index);
             } catch (IOException e) {
-                // TODO do something when this exception occurs
+                // TODO: do something clever when IOException is thrown
+                e.printStackTrace();
             }
         }
     }

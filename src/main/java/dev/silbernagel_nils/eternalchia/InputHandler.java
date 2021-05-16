@@ -14,7 +14,7 @@ public class InputHandler {
         this.chiaCliHandler = chiaCliHandler;
     }
 
-    public void listenParallel() {
+    public void backgroundListener() {
         new Thread(this::listen).start();
     }
 

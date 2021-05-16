@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 public class EternalChia {
     private final ChiaCliHandler chiaCliHandler;
@@ -36,8 +35,8 @@ public class EternalChia {
     }
 
     public void run() throws IOException {
-        inputHandler.listenParallel();
+        inputHandler.backgroundListener();
 
-        chiaCliHandler.plot(appArgs.getParallelPlots());
+        chiaCliHandler.plotParallel(appArgs.getParallelPlots());
     }
 }
