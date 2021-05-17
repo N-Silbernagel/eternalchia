@@ -9,8 +9,8 @@ public class Statistics {
         return generatedPlots;
     }
 
-    public void addGeneratedPlot() {
-        this.generatedPlots++;
+    public long addGeneratedPlot() {
+        return ++this.generatedPlots;
     }
 
     public void removeGeneratedPlot() {

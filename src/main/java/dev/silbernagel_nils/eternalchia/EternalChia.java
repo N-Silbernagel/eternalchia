@@ -35,8 +35,14 @@ public class EternalChia {
     }
 
     public void run() throws IOException {
+        Runtime.getRuntime().addShutdownHook(this.onShutdown());
+
         inputHandler.backgroundListener();
 
         chiaCliHandler.plotParallel(appArgs.getParallelPlots());
+    }
+
+    public Thread onShutdown() {
+        return new Thread(chiaCliHandler::killPlottingProcesses);
     }
 }
