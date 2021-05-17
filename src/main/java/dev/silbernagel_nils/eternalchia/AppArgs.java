@@ -9,7 +9,7 @@ import java.util.List;
 public class AppArgs {
     @Parameter(names = "-n", description = "Number of plots to do in parallel")
     private int parallelPlots;
-    @Parameter(names = "-dry", description = "Do a dry run, without executing chia chli")
+    @Parameter(names = "-dry", description = "Do a dry run, without executing chia cli")
     private boolean dry;
     @Parameter(names = "-ca", description = "Arguments for the chia cli")
     private String chiaArgs;
