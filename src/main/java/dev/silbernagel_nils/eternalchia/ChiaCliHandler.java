@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChiaCliHandler {
-    private final List<String> chiaArguments;
+    private final AppArgs appArgs;
     private final ProcessBuilder processBuilder;
     private final Statistics stats;
 
@@ -14,8 +14,8 @@ public class ChiaCliHandler {
 
     private final List<Process> plottingProcesses = new ArrayList<>();
 
-    public ChiaCliHandler(ArrayList<String> args, ProcessBuilder processBuilder, Statistics stats) {
-        this.chiaArguments = args;
+    public ChiaCliHandler(AppArgs appArgs, ProcessBuilder processBuilder, Statistics stats) {
+        this.appArgs = appArgs;
         this.processBuilder = processBuilder;
         this.stats = stats;
     }
@@ -40,14 +40,7 @@ public class ChiaCliHandler {
 
         long startTime = System.currentTimeMillis();
 
-        chiaArguments.add(0, "chia");
-        chiaArguments.add(1, "plots");
-        chiaArguments.add(2, "create");
-
-        Process plotProcess = processBuilder.command(chiaArguments.toArray(new String[0]))
-                .redirectError(new File("chia_cli_errors_" + index))
-                .redirectOutput(new File("chia_cli_output_" + index))
-                .start();
+        Process plotProcess = this.plotProcessProvider(index);
 
         plottingProcesses.add(plotProcess);
 
@@ -83,6 +76,25 @@ public class ChiaCliHandler {
                 e.printStackTrace();
             }
         }
+    }
+
+    public Process plotProcessProvider(int index) throws IOException {
+        List<String> commandArgs = new ArrayList<>();
+        if (appArgs.isDry()) {
+            commandArgs.add("sleep");
+            commandArgs.add("3");
+        } else {
+            String chiaExecutable = appArgs.hasChiaPath() ? appArgs.getChiaPath() : "chia";
+            commandArgs.add(chiaExecutable);
+            commandArgs.add("plots");
+            commandArgs.add("create");
+            commandArgs.addAll(appArgs.getChiaArgsAsList());
+        }
+
+        return processBuilder.command(commandArgs)
+                .redirectError(new File("chia_cli_errors_" + index))
+                .redirectOutput(new File("chia_cli_output_" + index))
+                .start();
     }
 
     public void killPlottingProcesses() {

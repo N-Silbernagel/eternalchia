@@ -38,8 +38,8 @@ public class Statistics {
     }
 
     public void showInfo() {
-        System.out.println("Generated " + getGeneratedPlots() + " plots.");
+        System.out.println("\nGenerated " + getGeneratedPlots() + " plots.");
         System.out.println(getFailedPlots() + " plots failed.");
-        System.out.println("Total plotting time: " + getPlotTime() + ".");
+        System.out.println("Total plotting time: " + getPlotTime() + ".\n");
     }
 }

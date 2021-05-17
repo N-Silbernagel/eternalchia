@@ -1,25 +1,41 @@
 package dev.silbernagel_nils.eternalchia;
 
+import com.beust.jcommander.Parameter;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AppArgs {
-    private final int parallelPlots;
-
-    private AppArgs(int parallelPlots) {
-        this.parallelPlots = parallelPlots;
-    }
+    @Parameter(names = "-n", description = "Number of plots to do in parallel")
+    private int parallelPlots;
+    @Parameter(names = "-dry", description = "Do a dry run, without executing chia chli")
+    private boolean dry;
+    @Parameter(names = "-ca", description = "Arguments for the chia cli")
+    private String chiaArgs;
+    @Parameter(names = "-cp", description = "Path to chia executable")
+    private String chiaPath;
 
     public int getParallelPlots() {
         return parallelPlots;
     }
 
-    public static AppArgs fromArgList(List<String> args) {
-        int parallelPlots;
-        if(!args.contains("-n")) {
-            parallelPlots = 1;
-        } else {
-            parallelPlots = Integer.parseInt(args.get(args.indexOf("-n") + 1));
+    public boolean isDry() {
+        return dry;
+    }
+
+    public List<String> getChiaArgsAsList() {
+        if (this.chiaArgs == null){
+            return new ArrayList<>();
         }
-        return new AppArgs(parallelPlots);
+        return Arrays.asList(this.chiaArgs.split(" "));
+    }
+
+    public boolean hasChiaPath() {
+        return chiaPath == null || chiaPath.isEmpty();
+    }
+
+    public String getChiaPath() {
+        return chiaPath;
     }
 }
