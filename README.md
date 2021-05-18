@@ -24,22 +24,22 @@ java -jar eternalchia.jar -n 2 -ca "-k 32 -b 4000 -r 2 -t /MYSSD -d /MYHDD"
 use ctrl + c to forcefully kill all plotting processes
 
 ## Arguments
-### number of parallel plots: <span style="color: green;">n</plot>
+### number of parallel plots: n
 ```shell
 java -jar eternalchia.jar -n 5
 ```
 
-### chia cli plotting arguments <span style="color: green;">ca</span>
+### chia cli plotting arguments: ca
 ```shell
 java -jar eternalchia.jar -ca "-k 32 -r 2 -b 4000 -t /PATH/TO/TEMP -d /PATH/TO/PERSIST"
 ```
 
-### do not actually run chia plot command <span style="color: green;">dry</span>
+### do not actually run chia plot command: dry
 ```shell
 java -jar eternalchia.jar -dry
 ```
 
-### specify path to chia executable <span style="color: green;">cp</span>
+### specify path to chia executable: cp
 Will default to simply using "chia" from PATH
 ```shell
 java -jar eternalchia.jar -cp /PATH/TO/CHIA
