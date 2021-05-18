@@ -17,7 +17,7 @@ public class AppArgs {
     private String chiaPath;
 
     public int getParallelPlots() {
-        return parallelPlots;
+        return Math.max(parallelPlots, 1);
     }
 
     public boolean isDry() {
