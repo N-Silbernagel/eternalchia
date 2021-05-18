@@ -32,7 +32,7 @@ public class AppArgs {
     }
 
     public boolean hasChiaPath() {
-        return chiaPath == null || chiaPath.isEmpty();
+        return chiaPath != null && !chiaPath.isEmpty();
     }
 
     public String getChiaPath() {
