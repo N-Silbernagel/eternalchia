@@ -35,8 +35,8 @@ public class ChiaCliHandler {
      * @param index index of the plot in the number of plots to do in parallel
      */
     private void plot(int index) throws IOException {
-        long nthPlot = stats.addGeneratedPlot();
-        System.out.println("Starting plot n." + stats.getGeneratedPlots());
+        long nthPlot = stats.getGeneratedPlots() + 1;
+        System.out.println("Starting plot n." + nthPlot);
 
         long startTime = System.currentTimeMillis();
 
@@ -63,8 +63,8 @@ public class ChiaCliHandler {
         if (process.exitValue() != 0) {
             stats.addFailedPlot();
             System.err.println("Generating plot n." + n + " failed.\n");
-            stats.removeGeneratedPlot();
         } else {
+            stats.addGeneratedPlot();
             System.out.println("Finished plot n." + n + " in " + Statistics.millisToHours(plotTime) + " Hours.\n");
         }
 

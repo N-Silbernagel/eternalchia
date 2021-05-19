@@ -1,5 +1,7 @@
 package dev.silbernagel_nils.eternalchia;
 
+import java.util.concurrent.TimeUnit;
+
 public class Statistics {
     private long generatedPlots = 0;
     private long plotTime = 0;
@@ -9,12 +11,8 @@ public class Statistics {
         return generatedPlots;
     }
 
-    public long addGeneratedPlot() {
-        return ++this.generatedPlots;
-    }
-
-    public void removeGeneratedPlot() {
-        this.generatedPlots--;
+    public void addGeneratedPlot() {
+        this.generatedPlots++;
     }
 
     public long getFailedPlots() {
@@ -34,12 +32,12 @@ public class Statistics {
     }
 
     public static double millisToHours(long millis) {
-        return ((double)(millis / 600)) / 100;
+        return TimeUnit.MILLISECONDS.toHours(millis);
     }
 
     public void showInfo() {
         System.out.println("\nGenerated " + getGeneratedPlots() + " plots.");
         System.out.println(getFailedPlots() + " plots failed.");
-        System.out.println("Total plotting time: " + getPlotTime() + ".\n");
+        System.out.println("Total plotting time: " + getPlotTime() + " Hours.\n");
     }
 }
